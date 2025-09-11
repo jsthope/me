@@ -532,7 +532,7 @@ module_init(reverse_shell_init);
 module_exit(reverse_shell_exit);
 ```
 
-```Makefile title="Makefile"
+```txt title="Makefile"
 obj-m +=reverse-shell.o
 
 all:

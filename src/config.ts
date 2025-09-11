@@ -13,7 +13,7 @@ export const siteConfig: SiteConfig = {
 	subtitle: "CTF writeups and some random stuff",
 	lang: "en", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
-		hue: 190, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
+		hue: 300, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
 		fixed: false, // Hide the theme color picker for visitors
 	},
 	banner: {
@@ -59,29 +59,22 @@ export const profileConfig: ProfileConfig = {
 	bio: "Learn cybersecurity for fun",
 	links: [
 		{
-			name: "Twitter",
-			icon: "fa6-brands:twitter", // Visit https://icones.js.org/ for icon codes
-			// You will need to install the corresponding icon set if it's not already included
-			// `pnpm add @iconify-json/<icon-set-name>`
-			url: "https://twitter.com",
-		},
-		{
-			name: "Steam",
-			icon: "fa6-brands:steam",
-			url: "https://store.steampowered.com",
+			name: "HackTheBox",
+			icon: "simple-icons:hackthebox",
+			url: "https://app.hackthebox.com/profile/793201",
 		},
 		{
 			name: "GitHub",
 			icon: "fa6-brands:github",
-			url: "https://github.com/saicaca/fuwari",
+			url: "https://github.com/jsthope",
 		},
 	],
 };
 
 export const licenseConfig: LicenseConfig = {
 	enable: true,
-	name: "CC BY-NC-SA 4.0",
-	url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+	name: "CC BY-SA 4.0",
+	url: "https://creativecommons.org/licenses/by-sa/4.0/",
 };
 
 export const expressiveCodeConfig: ExpressiveCodeConfig = {

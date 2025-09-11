@@ -65,9 +65,6 @@ importers:
       astro-expressive-code:
         specifier: ^0.41.3
         version: 0.41.3(astro@5.13.5(@types/node@24.3.1)(jiti@1.21.7)(lightningcss@1.29.3)(rollup@2.79.2)(sass@1.80.4)(stylus@0.64.0)(terser@5.43.1)(typescript@5.9.2)(yaml@2.7.0))
-      astro-icon:
-        specifier: ^1.1.5
-        version: 1.1.5
       hastscript:
         specifier: ^9.0.1
         version: 9.0.1
@@ -147,6 +144,9 @@ importers:
       '@biomejs/biome':
         specifier: 2.2.3
         version: 2.2.3
+      '@iconify-json/simple-icons':
+        specifier: ^1.2.51
+        version: 1.2.51
       '@rollup/plugin-yaml':
         specifier: ^4.1.2
         version: 4.1.2(rollup@2.79.2)
@@ -162,6 +162,9 @@ importers:
       '@types/sanitize-html':
         specifier: ^2.16.0
         version: 2.16.0
+      astro-icon:
+        specifier: ^1.1.5
+        version: 1.1.5
       postcss-import:
         specifier: ^16.1.1
         version: 16.1.1(postcss@8.5.3)
@@ -1111,6 +1114,9 @@ packages:
 
   '@iconify-json/material-symbols@1.2.34':
     resolution: {integrity: sha512-qOn1q0lMlLvSHTci0sabhKbfQ3h2XfahsoSWMy2X7eITQRoKrENuFKPB9x2bpvq+d1XxPiz/4UTFgfy/ejiFmg==}
+
+  '@iconify-json/simple-icons@1.2.51':
+    resolution: {integrity: sha512-vFH0QEHFG3rt9hZOR3oE/ZfAKFA7cS11UXttD/IphClEbiSTsPbpeeJ4kRYGDBUDmAKhBzk6jxHNG8VipwA69Q==}
 
   '@iconify/svelte@4.2.0':
     resolution: {integrity: sha512-fEl0T7SAPonK7xk6xUlRPDmFDZVDe2Z7ZstlqeDS/sS8ve2uyU+Qa8rTWbIqzZJlRvONkK5kVXiUf9nIc+6OOQ==}
@@ -6428,6 +6434,10 @@ snapshots:
       '@iconify/types': 2.0.0
 
   '@iconify-json/material-symbols@1.2.34':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/simple-icons@1.2.51':
     dependencies:
       '@iconify/types': 2.0.0
 

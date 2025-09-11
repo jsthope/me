@@ -1,8 +1,8 @@
 ---
-title: "[GlacierCTF 2023 - misc] Avatar"
+title: "[GlacierCTF 2023 - Misc] Avatar"
 description: "Writeup by jsthope"
 published: 2023-11-27
-tags: [GlacierCTF 2023, misc]
+tags: [GlacierCTF 2023, Misc]
 type: post
 category: Misc
 image: ./Glacier_CTF_Logo.png
