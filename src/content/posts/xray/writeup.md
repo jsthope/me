@@ -266,6 +266,34 @@ public float getAmbientOcclusionLightValue() {
 }
 ```
 
+```diff lang="java" group="fullbright" title="java"
+public int getLightValue() {
++   if (JNIBridge.xrayOn()) {
++       return 15;
++   }
+    return this.lightValue;
+}
+```
+
+```diff lang="java" group="fullbright" title="recaf assembler"
+.method public getLightValue ()I {
+    parameters: { this },
+    code: {
++   Z:
++       invokestatic JNIBridge.xrayOn ()Z
++       ifeq A
++       bipush 15
++       ireturn
+    A: 
+        line 119
+        aload this
+        getfield net/minecraft/block/Block.lightValue I
+        ireturn 
+    B: 
+    }
+}
+```
+
 # Implement the DLL native method logic
 
 ## Bool Enable / Disable Logic
