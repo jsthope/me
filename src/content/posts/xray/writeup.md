@@ -364,7 +364,7 @@ for (int i = 0; i < classCount; ++i)
 
 Then you will be able to redefine classes with JVMTI like this:
 
-```cpp
+```c++
 jvmtiClassDefinition def;
 std::memset(&def, 0, sizeof(def));
 def.klass = blockClass;
@@ -441,13 +441,13 @@ To safely perform a reload from native code, the system relies on three key mech
 Any part of the native code that wants the game to refresh its chunks does **not** call Minecraft directly.
 Instead, it simply raises a flag:
 
-```cpp
+```c++
 static volatile bool g_needReload = false;
 ```
 
 And when a reload is needed:
 
-```cpp
+```c++
 g_needReload = true;
 ```
 
@@ -475,7 +475,7 @@ The system replaces `glOrtho` with a custom wrapper. This wrapper performs the f
 
 Example wrapper (simplified):
 
-```cpp
+```c++
 void hk_glOrtho(...) {
     if (g_needReload) {
         g_needReload = false;
@@ -492,7 +492,7 @@ I will uses **MinHook**, a lightweight and widely used Windows API hooking libra
 
 Simplified:
 
-```cpp
+```c++
 MH_Initialize();
 MH_CreateHook(&glOrtho, &hk_glOrtho, &original_glOrtho);
 MH_EnableHook(MH_ALL_HOOKS);
@@ -509,7 +509,7 @@ Minecraft.getMinecraft().renderGlobal.loadRenderers();
 ```
 
 To do this safely from native code, the system uses JNI.
-```cpp
+```c++
 ReloadChunks() {
     // Get JVM thread context
     JNIEnv* env = ...;
