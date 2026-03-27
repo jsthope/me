@@ -61,7 +61,7 @@ export const profileConfig: ProfileConfig = {
 		{
 			name: "HackTheBox",
 			icon: "simple-icons:hackthebox",
-			url: "https://app.hackthebox.com/profile/793201",
+			url: "https://app.hackthebox.com/public/users/793201",
 		},
 		{
 			name: "GitHub",
